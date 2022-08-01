@@ -25,6 +25,7 @@ install_requires = [
     'PyYAML>=5.1,<7',
     'importlib-metadata>=1 ; python_version<"3.8"',
     'packaging>=20',
+    'jinja2<=3.1.2'
 ]
 
 swagger_ui_require = 'swagger-ui-bundle>=0.0.2,<0.1'
