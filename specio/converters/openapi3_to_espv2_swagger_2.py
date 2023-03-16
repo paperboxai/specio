@@ -61,22 +61,24 @@ class Converter():
             if variables:
                 for variable in variables:
                     server_url = server_url.replace('{' + variable + '}', variables[variable])
-            spec['host'] = server_url
-            spec['basePath'] = server['url'].split('/')[-1]
 
             url = urllib.parse.urlparse(server_url)
-            if url.netloc is None:
-                del spec['host']
-            else:
+            if url.netloc is not None and url.netloc != '':
                 spec['host'] = url.netloc
-
-            if url.scheme is None:
-                del spec['schemes']
             else:
+                spec.pop('host', None)
+
+            if url.path is not None and url.path != '':
+                spec['basePath'] = url.path
+            else:
+                spec['basePath'] = '/'
+
+            if url.scheme is not None and url.scheme != '':
                 spec['schemes'] = [url.scheme[
                     0: len(url.scheme) - 1]]  # strip off trailing colon
+            else:
+                spec.pop('schemes', None)
 
-            spec['basePath'] = url.path
         spec.pop('servers', None)
         del spec['openapi']
 
