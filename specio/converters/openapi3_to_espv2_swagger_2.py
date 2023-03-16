@@ -176,7 +176,14 @@ class Converter():
     def __convert_responses(cls, operation: dict):
         """
         """
-        for code in operation['responses']:
+        for code in deepcopy(operation)['responses']:
+            if 'x' in code.lower():
+                del operation['responses'][code]
+                logger.warn(
+                    'Response code %s is not supported in Swagger 2.0, dropping response for status code',
+                    code
+                )
+                continue
             response = operation['responses'][code]
             if response.get('content'):
                 any_schema = json_schema = None
