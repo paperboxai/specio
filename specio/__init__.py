@@ -1,5 +1,5 @@
 # This version is replaced during release process.
-__version__ = '2022.0.dev1'
+__version__ = "2022.0.dev1"
 
 from .converters import openapi3_to_espv2_swagger_2
 from .enums import SpecType
@@ -7,16 +7,17 @@ from .spec import OpenAPISpecification, Specification
 from .utils import yamldumper
 
 
-def resolve_from_file(spec_file: str, from_type: SpecType) -> Specification:
+def resolve_from_to_file(spec_file: str, spec_file_out: str, from_type: SpecType) -> None:
     """
     TBA
     """
     if from_type == SpecType.OpenAPI3_0:
         spec = OpenAPISpecification.from_file(spec_file)
     else:
-        raise NotImplementedError(f'Conversion from {from_type} is not implemented.')
+        raise NotImplementedError(f"Conversion from {from_type} is not implemented.")
 
-    return spec
+    with open(spec_file_out, "w") as f:
+        f.write(yamldumper(spec.spec))
 
 
 def convert_from_file(spec_file: str, from_type: SpecType, to_type: SpecType) -> Specification:
@@ -26,7 +27,7 @@ def convert_from_file(spec_file: str, from_type: SpecType, to_type: SpecType) ->
     if from_type == SpecType.OpenAPI3_0:
         spec = OpenAPISpecification.from_file(spec_file)
     else:
-        raise NotImplementedError(f'Conversion from {from_type} is not implemented.')
+        raise NotImplementedError(f"Conversion from {from_type} is not implemented.")
 
     if to_type == SpecType.Swagger2_0:
         spec_out = openapi3_to_espv2_swagger_2.Converter.from_specification(spec)
@@ -37,11 +38,12 @@ def convert_from_file(spec_file: str, from_type: SpecType, to_type: SpecType) ->
 
 
 def convert_from_to_file(
-        spec_file: str, spec_file_out: str, from_type: SpecType, to_type: SpecType):
+    spec_file: str, spec_file_out: str, from_type: SpecType, to_type: SpecType
+):
     """
     TBA
     """
     spec_out = convert_from_file(spec_file, from_type, to_type)
 
-    with open(spec_file_out, 'w') as f:
+    with open(spec_file_out, "w") as f:
         f.write(yamldumper(spec_out.spec))
