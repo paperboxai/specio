@@ -1,5 +1,5 @@
 # This version is replaced during release process.
-__version__ = "2022.0.dev1"
+# __version__ = "2022.0.dev1"
 
 from .converters import openapi3_to_espv2_swagger_2
 from .enums import SpecType
