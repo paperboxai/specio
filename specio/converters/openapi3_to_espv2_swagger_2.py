@@ -215,9 +215,9 @@ class Converter:
 
                     content = response["content"][media_range]
 
-                    any_schema = any_schema if any_schema is not None else content["schema"]
+                    any_schema = any_schema if any_schema is not None else content.get("schema") or {}
                     if not json_schema and utils.is_json_mimetype(media_type):
-                        json_schema = content["schema"]
+                        json_schema = content.get("schema") or {}
 
                     if content.get("example") is not None:
                         response["examples"] = response.get("examples", {})
